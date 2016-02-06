@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApplication1
 {
@@ -13,6 +13,17 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+            string baseUrl = "http://weather.livedoor.com/forecast/webservice/json/v1";
+            string cityname = "130010";
+
+            string url = $"{baseUrl}?city={cityname}";
+            string json = new HttpClient().GetStringAsync(url).Result;
+            JObject jobj = JObject.Parse(json);
+
+            File.WriteAllText(
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "tokyo-weather.txt"),
+                    jobj.ToString()
+                );
 
         }
     }
